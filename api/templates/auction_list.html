@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Available auctions</h1>
+    {% for auction in auctions %}
+            <article class="auction">
+                <time class="date">
+                    {{ auction.start.time }}
+                </time>
+                <h2><a href="{% url 'auction_detail' pk=auction.pk %}">{{ auction.title }}</a></h2>
+                <p>{{ auction.image|linebreaksbr }}</p>
+                <p>Starting price: {{ auction.starting_price|linebreaksbr }}</p>
+                <p>Current price: {{ auction.current_price|linebreaksbr }}</p>
+                {% if auction.is_closed %}
+                    <p>This auction is closed.</p>
+                {% endif %}
+        </article>
+    {% endfor %}
+{% endblock %}

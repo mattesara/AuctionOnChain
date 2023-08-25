@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ auction.title }}</h2>
+    <p>{{ auction.image|linebreaksbr }}</p>
+    <p>Starting price: {{ auction.starting_price|linebreaksbr }}</p>
+    <p>Current price: {{ auction.current_price|linebreaksbr }}</p>
+    <p>Remaining time: <span id="timer"></span></p>
+    <h3>Last Offers:</h3>
+    <ul>
+        {% for bid in last_bids %}
+            <li>{{ bid.bidder_username }} has offer {{ bid.amount }}</li>
+        {% endfor %}
+    </ul>
+    {% if not auction.is_closed %}
+        <h3>Make an offer:</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ bid_form.as_p }}
+        <button type="submit">Send offer</button>
+        </form>
+    {% endif %}
+    {% if auction.is_closed %}
+        <p>This auction is closed.</p>
+    {% endif %}
+    {% if auction.is_closed and transaction %}
+        <a href="{% url 'transaction_detail' pk=transaction.pk %}">View transaction details</a>
+    {% endif %}
+    <script>
+        function updateTimer() {
+            var now = new Date();
+            var endTime = new Date("{{ auction.end_time|date:'Y-m-d H:i:s' }}");
+            var timeRemaining = endTime - now;
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById("timer").innerHTML = "Time has expired!";
+            } else {
+                var seconds = Math.floor((timeRemaining / 1000) % 60);
+                var minutes = Math.floor((timeRemaining / 1000 / 60) % 60);
+                var hours = Math.floor((timeRemaining / 1000 / 3600) % 24);
+                var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+
+
+                seconds = (seconds < 10) ? "0" + seconds : seconds;
+                minutes = (minutes < 10) ? "0" + minutes : minutes;
+                hours = (hours < 10) ? "0" + hours : hours;
+
+                document.getElementById("timer").innerHTML = days + ":" + hours + ":" + minutes + ":" + seconds;
+            }
+        }
+
+        var timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+{% endblock %}

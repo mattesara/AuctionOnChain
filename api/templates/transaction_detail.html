@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ <h1>Transaction details</h1>
+    <p>Winner: {{ transaction.winner.user.username }}</p>
+    <p>Winning bid amount: {{ transaction.amount }}</p>
+    <p>Date of transaction: {{ transaction.transaction_time }}</p>
+    <a href="{{ link }}" target="_blank" >Show transaction in Etherscan</a>
+{% endblock %}

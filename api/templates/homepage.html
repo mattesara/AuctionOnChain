@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Welcome, login to bid</h2>
+    {% if user.is_authenticated %}
+      <p>Good shopping in our website!</p>
+      <a href="{% url 'auction_list' %}">Available auctions</a>
+      <a href="{% url 'logout_view' %}">Logout</a>
+    {% else %}
+        <a href="{% url 'login_view' %}">Login</a>
+        <a href="{% url 'register' %}">Registration</a>
+    {% endif %}
+{% endblock %}
