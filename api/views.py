@@ -54,7 +54,7 @@ def auction_detail(request, pk):                                   #Auction's de
         auction.is_closed = True
         if auction.bids.exists():                                             #check if the auction has any offers
             latest_bid_serialized = redis_client.zrevrange(cache_key, 0, 0, withscores=True)
-            latest_bid = json.loads(latest_bid_serialized[0][0].decode('utf-8'))                            #save on Redis' database the Bid with json
+            latest_bid = json.loads(latest_bid_serialized[0][0].decode('utf-8'))                            #save on Redis' database the closed auction data with json
             json_data = {'Auction ID': auction_id,
                          'Auction item': auction.title,
                          'Starting price': auction.starting_price,
