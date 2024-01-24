@@ -30,9 +30,9 @@ class Auction(models.Model):
     hash = models.CharField(max_length=66, blank=True, null=True)
     txId = models.CharField(max_length=66, blank=True, null=True)
 
-    def writeOnChain(self):
-        json_data = json.dumps(self.data)
-        self.hash = hashlib.sha256(json_data.encode('utf-8')).hexdigest()
+    def writeOnChain(self):                                                            #function linked to the model 'Auction'
+        json_data = json.dumps(self.data)                                              #json of closed action data
+        self.hash = hashlib.sha256(json_data.encode('utf-8')).hexdigest()              #json hash and blockchain transaction
         self.txId = sendTransaction(self.hash)
         self.save()
 
@@ -50,7 +50,7 @@ class Transaction(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs):                           #function to create a profile when a new user registers
     if created:
         profile = Profile.objects.create(user=instance)
         profile.email = instance.email
